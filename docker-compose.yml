@@ -1,7 +1,8 @@
-version: '3.7'
+version: '3'
 services:
     mirakurun:
-        image: chinachu/mirakurun
+        container_name: mirakurun
+        image: yude/mirakurun:latest
         cap_add:
             - SYS_ADMIN
             - SYS_NICE
@@ -9,13 +10,17 @@ services:
             - "40772:40772"
             - "9229:9229"
         volumes:
-            - ./mirakurun/conf:/app-config
-            - ./mirakurun/data:/app-data
+            - /etc/localtime:/etc/localtime:ro
+            - ./mirakurun/conf/:/app-config/
+            - ./mirakurun/data/:/app-data/
         environment:
             TZ: "Asia/Tokyo"
         devices:
+            - /dev/px4video0:/dev/px4video0
+            - /dev/px4video1:/dev/px4video1
+            - /dev/px4video2:/dev/px4video2
+            - /dev/px4video3:/dev/px4video3
             - /dev/bus:/dev/bus
-            - /dev/dvb:/dev/dvb
         restart: always
         logging:
             driver: json-file
@@ -24,16 +29,17 @@ services:
                 max-size: 10m
 
     mysql:
+        container_name: mysql-epgstation
         image: mariadb:10.4
         volumes:
-            - mysql-db:/var/lib/mysql
+            - ./mysql:/var/lib/mysql
         environment:
             MYSQL_USER: epgstation
             MYSQL_PASSWORD: epgstation
             MYSQL_ROOT_PASSWORD: epgstation
             MYSQL_DATABASE: epgstation
             TZ: "Asia/Tokyo"
-        command: --character-set-server=utf8 --collation-server=utf8_unicode_ci --performance-schema=false --expire_logs_days=1
+        command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci --performance-schema=false --expire_logs_days=1
         restart: always
         logging:
             options:
@@ -41,13 +47,17 @@ services:
                 max-file: "3"
 
     epgstation:
-        build: epgstation
+        container_name: epgstation
+        build: 
+          context: epgstation
+          dockerfile: alpine.Dockerfile
         volumes:
+            - /etc/localtime:/etc/localtime:ro
             - ./epgstation/config:/app/config
             - ./epgstation/data:/app/data
             - ./epgstation/thumbnail:/app/thumbnail
             - ./epgstation/logs:/app/logs
-            - ./recorded:/app/recorded
+            - /mnt/data4/recorded:/app/recorded
         environment:
             TZ: "Asia/Tokyo"
         depends_on:
@@ -56,12 +66,5 @@ services:
         ports:
             - "8888:8888"
             - "8889:8889"
-#         user: "1000:1000"
-#         devices:
-#             - /dev/dri:/dev/dri
+        #user: "1000:1000"
         restart: always
-
-volumes:
-    mysql-db:
-        driver: local
-
