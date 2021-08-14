@@ -1,0 +1,3 @@
+[submodule "epgstation/EPGS-to-Discord-v2"]
+	path = epgstation/EPGS-to-Discord-v2
+	url = https://github.com/yude/EPGS-to-Discord-v2
