@@ -51,6 +51,7 @@ services:
         build: 
           context: epgstation
           dockerfile: alpine.Dockerfile
+        image: yude/epgstation
         volumes:
             - /etc/localtime:/etc/localtime:ro
             - ./epgstation/config:/app/config
