@@ -61,6 +61,7 @@ services:
             - /mnt/data4/recorded:/app/recorded
         environment:
             TZ: "Asia/Tokyo"
+            URL: "" # Discord Webhook URL
         depends_on:
             - mirakurun
             - mysql
