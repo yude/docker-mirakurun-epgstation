@@ -58,6 +58,7 @@ services:
             - ./epgstation/data:/app/data
             - ./epgstation/thumbnail:/app/thumbnail
             - ./epgstation/logs:/app/logs
+            - ./epgstation/EPGS-to-Discord-v2:/app/EPGS-to-Discord-v2
             - /mnt/data4/recorded:/app/recorded
         environment:
             TZ: "Asia/Tokyo"
