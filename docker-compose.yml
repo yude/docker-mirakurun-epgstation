@@ -49,8 +49,8 @@ services:
     epgstation:
         container_name: epgstation
         build: 
-          context: epgstation
-          dockerfile: alpine.Dockerfile
+          context: ./epgstation
+          dockerfile: debian.Dockerfile
         image: yude/epgstation
         volumes:
             - /etc/localtime:/etc/localtime:ro
