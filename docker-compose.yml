@@ -12,6 +12,7 @@ services:
         volumes:
             - /etc/localtime:/etc/localtime:ro
             - ./mirakurun/conf/:/app-config/
+            - ./mirakurun/conf/server.yml:/app/config/server.yml
             - ./mirakurun/data/:/app-data/
         environment:
             TZ: "Asia/Tokyo"
